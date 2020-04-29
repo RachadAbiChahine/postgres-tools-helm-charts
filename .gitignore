@@ -1,0 +1,15 @@
+# Created by .ignore support plugin (hsz.mobi)
+Supprimerait .idea/
+# Various IDEs
+.project
+.idea/
+*.tmproj
+.vscode/
+Supprimerait .idea/.gitignore
+Supprimerait .idea/PostgreSQL-charts.iml
+Supprimerait .idea/azureSettings.xml
+Supprimerait .idea/codeStyles/
+Supprimerait .idea/inspectionProfiles/
+Supprimerait .idea/misc.xml
+Supprimerait .idea/modules.xml
+Supprimerait .idea/vcs.xml
