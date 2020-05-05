@@ -30,8 +30,8 @@ jobs:
     # Runs a set of commands using the runners shell
     - name: helm package
       run: find . -type  d  -maxdepth 1 -not -path "./.*" -not -path "." -exec helm package "{}" \;
-    - uses: secrethub/actions/env-export@v0.1.0
-      env:
-         TOKEN=${{ secrets.PERSONAL_TOKEN }}
+    
     - name: helm push
+      env: 
+        TOKEN: ${{ secrets.PERSONAL_TOKEN }}
       run: for CHART in $(find . -type f -path "*.tgz"  -exec  basename {} \;) do curl -v  -i -X PUT -u RachadAbiChahine:${TOKEN} -d {"\"path\":\"${CHART}\",\"message\":\"update\", \"content\":\"$(openssl base64 -A -in ./${CHART})\", \"branch\":\"master\",\"sha\":$(curl -u RachadAbiChahine:${TOKEN} -X GET https://api.github.com/repos/RachadAbiChahine/helm-charts-repo/contents/${CHART} | jq .sha)}" "https://api.github.com/repos/RachadAbiChahine/helm-charts-repo/contents/${CHART}"; done
