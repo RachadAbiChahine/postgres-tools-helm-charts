@@ -30,3 +30,6 @@ jobs:
     # Runs a set of commands using the runners shell
     - name: helm package
       run: find . -type  d  -maxdepth 1 -not -path "./.*" -not -path "." -exec helm package "{}" \;
+    
+    - name: helm push
+      run: find . -type f ".*.tgz" -exec ls "{}" \;
