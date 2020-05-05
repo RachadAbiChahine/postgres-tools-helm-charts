@@ -32,4 +32,6 @@ jobs:
       run: find . -type  d  -maxdepth 1 -not -path "./.*" -not -path "." -exec helm package "{}" \;
     
     - name: helm push
-      run: find . -type f -path "*.tgz" -exec ls "{}" \;
+      env: TOKEN=${{ secrets.PERSONAL_TOKEN }}
+      run: for CHART in $(find . -type f -path "*.tgz"  -exec  basename {} \;) ; do curl -v  -i -X PUT -ucurl -u RachadAbiChahine:${TOKEN} -d {"\"path\": \"${CHART}\",\"message\": \"update\", \"content\": \"$(openssl base64 -A -in ./${CHART})\", \"branch\": \"master\",\"sha\": $(curl -u RachadAbiChahine:${TOKEN} -X GET https://api.github.com/repos/RachadAbiChahine/helm-charts-repo/contents/${CHART} | jq .sha)}" "https://api.github.com/repos/RachadAbiChahine/helm-charts-repo/contents/${CHART}"; done
+
