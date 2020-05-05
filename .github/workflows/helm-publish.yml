@@ -34,4 +34,4 @@ jobs:
     - name: helm push
       env: 
         TOKEN: ${{ secrets.PERSONAL_TOKEN }}
-      run: for CHART in $(find . -type f -path "*.tgz"  -exec  basename {} \;) do curl -v  -i -X PUT -u RachadAbiChahine:${TOKEN} -d {"\"path\":\"${CHART}\",\"message\":\"update\", \"content\":\"$(openssl base64 -A -in ./${CHART})\", \"branch\":\"master\",\"sha\":$(curl -u RachadAbiChahine:${TOKEN} -X GET https://api.github.com/repos/RachadAbiChahine/helm-charts-repo/contents/${CHART} | jq .sha)}" "https://api.github.com/repos/RachadAbiChahine/helm-charts-repo/contents/${CHART}"; done
+      run: for CHART in $(find . -type f -path "*.tgz"  -exec  basename {} \;) do curl -v  -i -X PUT -u RachadAbiChahine:${TOKEN} -d {"\"path\":\"${CHART}\",\"message\":\"update\", \"content\":\"$(openssl base64 -A -in ./${CHART})\", \"branch\":\"master\",\"sha\":$(curl -u RachadAbiChahine:${TOKEN} -X GET https://api.github.com/repos/RachadAbiChahine/helm-charts-repo/contents/${CHART} | jq .sha)}" "https://api.github.com/repos/RachadAbiChahine/helm-charts-repo/contents/${CHART}" \ done
