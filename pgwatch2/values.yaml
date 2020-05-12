@@ -20,8 +20,6 @@ env:
   PW2_IPASSWORD: minikube
   PW2_IUSER: minikube
 
-envFrom: {}
-
 podSecurityContext: {}
   # fsGroup: 2000
 
