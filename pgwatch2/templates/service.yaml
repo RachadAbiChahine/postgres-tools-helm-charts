@@ -12,7 +12,7 @@ spec:
       protocol: TCP
       name: pgwatch-adm
     - port: {{ .Values.service.grafanaport }}
-      targetPort: pgwatch-adm
+      targetPort: grafana
       protocol: TCP
       name: grafana
   selector:

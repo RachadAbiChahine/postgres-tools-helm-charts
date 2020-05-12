@@ -36,15 +36,15 @@ spec:
               containerPort: 8080
               protocol: TCP
             - name: grafana
-              containerPort: 300
+              containerPort: 3000
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: {{ .Values.ingress.adm.path }}
+              path: /
               port: pgwatch-adm
           readinessProbe:
             httpGet:
-              path: {{ .Values.ingress.adm.path }}
+              path: /
               port: pgwatch-adm
           resources:
       {{- toYaml .Values.resources | nindent 12 }}
