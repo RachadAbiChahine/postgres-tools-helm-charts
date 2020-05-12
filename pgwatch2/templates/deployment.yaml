@@ -40,11 +40,11 @@ spec:
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /
+              path: {{ .Values.ingress.adm.path }}
               port: pgwatch-adm
           readinessProbe:
             httpGet:
-              path: /
+              path: {{ .Values.ingress.adm.path }}
               port: pgwatch-adm
           resources:
       {{- toYaml .Values.resources | nindent 12 }}
