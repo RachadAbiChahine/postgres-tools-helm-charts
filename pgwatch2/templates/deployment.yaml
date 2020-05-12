@@ -30,21 +30,24 @@ spec:
             {{- range $pkey, $pval := .Values.env }}
             - name: {{ $pkey }}
               value: {{ quote $pval }}
-          {{- end }}
+            {{- end }}
           envFrom:
           {{ toYaml .Values.envFrom | indent 10 }}
           ports:
-            - name: http
+            - name: pgwatch-adm
               containerPort: 8080
+              protocol: TCP
+            - name: grafana
+              containerPort: 300
               protocol: TCP
           livenessProbe:
             httpGet:
               path: /
-              port: http
+              port: pgwatch-adm
           readinessProbe:
             httpGet:
               path: /
-              port: http
+              port: pgwatch-adm
           resources:
       {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}

@@ -1,6 +1,5 @@
 {{- if .Values.ingress.enabled -}}
 {{- $fullName := include "pgwatch2.fullname" . -}}
-{{- $svcPort := .Values.service.port -}}
 {{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
 apiVersion: networking.k8s.io/v1beta1
 {{- else -}}
@@ -18,24 +17,22 @@ metadata:
 spec:
 {{- if .Values.ingress.tls }}
   tls:
-  {{- range .Values.ingress.tls }}
     - hosts:
-      {{- range .hosts }}
-        - {{ . | quote }}
-      {{- end }}
-      secretName: {{ .secretName }}
+      -  {{ .Values.ingress.tls.host }}
+      secretName: {{ .Values.ingress.tls.secretName }}
   {{- end }}
-{{- end }}
   rules:
-  {{- range .Values.ingress.hosts }}
-    - host: {{ .host | quote }}
+    - host: {{ .Values.ingress.host | quote }}
       http:
         paths:
-        {{- range .paths }}
-          - path: {{ . }}
+          - path: {{ .Values.ingress.adm.path }}
             backend:
-              serviceName: {{ $fullName }}
-              servicePort: {{ $svcPort }}
-        {{- end }}
+              serviceName: pgwatch-adm
+              servicePort: {{ .Values.service.admport }}
+          {{- if .Values.ingress.grafana.enable }}
+          - path: {{ .Values.ingress.grafana.path }}
+            backend:
+              serviceName: grafana
+              servicePort: {{ .Values.service.grafanaport }}
+          {{- end }}
   {{- end }}
-{{- end }}

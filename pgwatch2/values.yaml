@@ -20,6 +20,7 @@ env:
   PW2_IPASSWORD: minikube
   PW2_IUSER: minikube
 
+envFrom: {}
 
 podSecurityContext: {}
   # fsGroup: 2000
@@ -33,22 +34,28 @@ securityContext: {}
   # runAsUser: 1000
 
 service:
+
   type: ClusterIP
-  port: 80
+  admport: 80
+  grafanaport: 3000
 
 ingress:
   enabled: true
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
-  hosts:
-    - host: pgwatch2.192.168.99.105.xip.io
-      paths: [/]
-
   tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
+    #  - secretName: chart-example-tls
+    #    host:
+    #      - chart-example.local
+  annotations: {}
+  # kubernetes.io/ingress.class: nginx
+  # kubernetes.io/tls-acme: "true"
+  host: pgwatch2.192.168.99.105.xip.io
+  adm:
+    path: /adm
+
+  grafana:
+    enable: true
+    path: /grafana
+
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious

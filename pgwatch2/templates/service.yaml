@@ -7,10 +7,14 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.service.port }}
-      targetPort: http
+    - port: {{ .Values.service.admport }}
+      targetPort: pgwatch-adm
       protocol: TCP
-      name: http
+      name: pgwatch-adm
+    - port: {{ .Values.service.grafanaport }}
+      targetPort: pgwatch-adm
+      protocol: TCP
+      name: grafana
   selector:
     app.kubernetes.io/name: {{ include "pgwatch2.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
