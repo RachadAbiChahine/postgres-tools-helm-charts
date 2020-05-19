@@ -18,7 +18,6 @@ persistentVolumes:
     annotations: {}
     accessModes:
       - ReadWriteOnce
-    storageClass:
     existingClaim: ""
     mountPath: /var/lib/postgresql
     size: 10Gi
