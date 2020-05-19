@@ -46,9 +46,20 @@ spec:
             httpGet:
               path: /
               port: pgwatch-adm
+          volumeMounts:
+            - name: database-volume
+              mountPath: {{ .Values.persistentVolumes.database.mountPath }}
           resources:
       {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
+      volumes:
+        - name: database-volume
+        {{- if .Values.persistentVolumes.database.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ if .Values.persistentVolumes.database.existingClaim }}{{ .Values.persistentVolumes.database.existingClaim }}{{- else }}{{ include "pgwatch2.fullname" . }}-database{{- end }}
+        {{ else }}
+          emptyDir:
+      {{ end }}
       nodeSelector:
       {{- toYaml . | nindent 8 }}
       {{- end }}

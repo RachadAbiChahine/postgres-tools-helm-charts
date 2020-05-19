@@ -12,7 +12,16 @@ image:
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
-
+persistentVolumes:
+  database:
+    enabled: true
+    annotations: {}
+    accessModes:
+      - ReadWriteOnce
+    storageClass:
+    existingClaim: ""
+    mountPath: /var/lib/postgresql
+    size: 10Gi
 env:
     PW2_IHOST: influxdb.minikube.local
     PW2_IPORT: 80

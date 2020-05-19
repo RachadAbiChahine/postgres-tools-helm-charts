@@ -1,0 +1,26 @@
+{{- if and .Values.persistentVolumes.database.enabled (not .Values.persistentVolumes.database.existingClaim) }}
+  {{- $fullName := include "pgwatch2.fullname" . -}}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ $fullName }}
+  labels:
+  {{ include "pgwatch2.labels" . | indent 4 }}
+  {{- if .Values.persistentVolumes.database.annotations }}
+  annotations:
+  {{- .Values.persistentVolumes.database.annotaions | toYaml | nindent 4 }}
+  {{- end }}
+spec:
+  accessModes:
+  {{- .Values.persistentVolumes.database.accessModes | toYaml | nindent 4 }}
+  {{- if .Values.persistentVolumes.database.storageClass }}
+  {{- if (eq "-" .Values.persistentVolumes.database.storageClass) }}
+  storageClassName: ""
+  {{- else }}
+  storageClassName: "{{ .Values.persistentVolumes.database.storageClass }}"
+  {{- end }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.persistentVolumes.database.size }}
+  {{- end }}
