@@ -5,7 +5,7 @@ apiVersion: v1
 metadata:
   name: {{ $fullName }}
   labels:
-  {{- include "pgwatch2.labels" . | indent 4 }}
+{{ include "pgwatch2.labels" . | indent 4 }}
   {{- if .Values.persistentVolumes.database.annotations }}
   annotations:
   {{- .Values.persistentVolumes.database.annotaions | toYaml | nindent 4 }}
