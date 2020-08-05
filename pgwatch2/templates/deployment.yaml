@@ -11,6 +11,8 @@ spec:
       app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
+      annotations:
+      {{- toYaml .Values.metadata.annotations | nindent 8 }}
       labels:
         app.kubernetes.io/name: {{ include "pgwatch2.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
