@@ -9,6 +9,11 @@ image:
   tag: 1.7.1
   pullPolicy: IfNotPresent
 
+confdbsidecar:
+  image:
+    repository: kiwigrid/k8s-sidecar
+    tag: 0.1.178
+      
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
@@ -31,6 +36,8 @@ env:
     PW2_WEBUSER: admin
     PW2_WEBPASSWORD: admin
     PW2_TESTDB: true
+    PW2_CONFIG: /tmp/config
+
 podSecurityContext: {}
   # fsGroup: 2000
 

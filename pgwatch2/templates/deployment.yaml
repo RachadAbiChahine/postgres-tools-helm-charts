@@ -26,6 +26,21 @@ spec:
       securityContext:
       {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
+        {{ if .Values.env.PW2_CONFIG }}
+        - name: pgwatch2-sc-database
+          image: "{{ .Values.confdbsidecar.image.repository }}:{{ .Values.confdbsidecar.image.tag }}"
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: LABEL
+              value: pgwatch2_database
+            - name: FOLDER
+              value: {{ .Values.env.PW2_CONFIG }}
+            - name: RESOURCE
+              value: both
+          volumeMounts:
+            - name: sc-database-volume
+              mountPath: {{ .Values.env.PW2_CONFIG }}
+          {{ end }}
         - name: {{ .Chart.Name }}
           securityContext:
           {{- toYaml .Values.securityContext | nindent 12 }}
@@ -51,9 +66,11 @@ spec:
             httpGet:
               path: /
               port: pgwatch-adm
+        {{ if .Values.env.PW2_CONFIG }}
           volumeMounts:
-            - name: database-volume
-              mountPath: {{ .Values.persistentVolumes.database.mountPath }}
+              - name: sc-database-volume
+                mountPath: {{ .Values.env.PW2_CONFIG }}
+        {{ end }}
           resources:
       {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
@@ -69,11 +86,10 @@ spec:
       tolerations:
   {{- toYaml . | nindent 8 }}
   {{- end }}
+  {{ if .Values.env.PW2_CONFIG }}
       volumes:
-        - name: database-volume
-          {{- if .Values.persistentVolumes.database.enabled }}
-          persistentVolumeClaim:
-            claimName: {{ if .Values.persistentVolumes.database.existingClaim }}{{ .Values.persistentVolumes.database.existingClaim }}{{- else }}{{ $fullName }}{{- end }}
-          {{ else }}
-          emptyDir:
+        - name: sc-database-volume
+          emptyDir: {}
   {{ end }}
+
+
