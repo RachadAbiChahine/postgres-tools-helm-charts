@@ -73,18 +73,17 @@ spec:
               path: /
               port: pgwatch-adm
           {{- end }}
-          {{ if .Values.env.PW2_CONFIG }}
+          {{- if .Values.env.PW2_CONFIG }}
           volumeMounts:
             - name: sc-database-volume
               mountPath: {{ .Values.env.PW2_CONFIG }}
-          {{ end }}
-          {{ if .Values.env.PW2_METRICS_FOLDER }}
+          {{- end }}
+          {{- if .Values.env.PW2_METRICS_FOLDER }}
           volumeMounts:
             - name: metric-from-git
               mountPath: {{ .Values.env.PW2_METRICS_FOLDER }}
               subPath: {{ .Values.metrics.subPath }}
-
-          {{ end }}
+          {{- end }}
           resources:
       {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
@@ -99,16 +98,16 @@ spec:
       tolerations:
       {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{ if .Values.env.PW2_CONFIG }}
+      {{- if .Values.env.PW2_CONFIG }}
       volumes:
         - name: sc-database-volume
           emptyDir: { }
-          {{ end }}
-        {{ if .Values.env.PW2_METRICS_FOLDER }}
+        {{- end }}
+        {{- if .Values.env.PW2_METRICS_FOLDER }}
         - name: metric-from-git
           gitRepo:
             repository: {{ .Values.metrics.repository}}
             revision: {{ .Values.metrics.revision}}
-  {{ end }}
+  {{- end }}
 
 
