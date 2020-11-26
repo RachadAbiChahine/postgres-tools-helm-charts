@@ -41,8 +41,8 @@ env:
     PW2_WEBUSER: admin
     PW2_WEBPASSWORD: admin
     PW2_TESTDB: true
-    PW2_CONFIG: "/tmp/config"
-    PW2_METRICS_FOLDER: "/pgwatch2/metrics/"
+    PW2_CONFIG: /tmp/config
+    PW2_METRICS_FOLDER: /pgwatch2/metrics/
 
 podSecurityContext: {}
   # fsGroup: 2000
