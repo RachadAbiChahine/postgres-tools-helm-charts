@@ -80,8 +80,10 @@ spec:
           {{ end }}
           {{ if .Values.env.PW2_METRICS_FOLDER }}
           volumeMounts:
-            - name: sc-database-volume
-              mountPath: {{ .Values.env.PW2_CONFIG }}
+            - name: metric-from-git
+              mountPath: {{ .Values.env.PW2_METRICS_FOLDER }}
+              subPath: {{ .Values.metrics.subPath }}
+
           {{ end }}
           resources:
       {{- toYaml .Values.resources | nindent 12 }}
