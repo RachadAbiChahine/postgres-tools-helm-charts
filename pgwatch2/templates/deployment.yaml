@@ -71,10 +71,14 @@ spec:
               - name: sc-database-volume
                 mountPath: {{ .Values.env.PW2_CONFIG }}
         {{ end }}
+          {{ if .Values.env.PW2_METRICS_FOLDER }}
+          volumeMounts:
+            - name: sc-database-volume
+              mountPath: {{ .Values.env.PW2_CONFIG }}
+          {{ end }}
           resources:
       {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
-
       nodeSelector:
       {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -91,5 +95,11 @@ spec:
         - name: sc-database-volume
           emptyDir: {}
   {{ end }}
+          {{ if .Values.env.PW2_METRICS_FOLDER }}
+        - name: metric-from-git
+          gitRepo:
+            repository: "https://github.com/surajssd/hitcounter"
+            revision: "9fd11822b822c94853b1c74ceb53adb8e1d2cfc8"
+          {{ end }}
 
 
