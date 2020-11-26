@@ -40,17 +40,22 @@ spec:
           volumeMounts:
             - name: sc-database-volume
               mountPath: {{ .Values.env.PW2_CONFIG }}
-          {{ end }}
+        {{ end }}
         - name: {{ .Chart.Name }}
           securityContext:
           {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          {{- if eq .Values.image.daemon true}}
+          image: "cybertec/pgwatch2-daemon:{{ .Values.image.tag }}"
+          {{- else }}
+          image: "cybertec/pgwatch2:{{ .Values.image.tag }}"
+          {{- end }}
+
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             {{- range $pkey, $pval := .Values.env }}
             - name: {{ $pkey }}
               value: {{ quote $pval }}
-            {{- end }}
+          {{- end }}
           ports:
             - name: pgwatch-adm
               containerPort: 8080
@@ -58,6 +63,7 @@ spec:
             - name: grafana
               containerPort: 3000
               protocol: TCP
+          {{- if not (eq .Values.image.daemon true) }}
           livenessProbe:
             httpGet:
               path: /
@@ -66,11 +72,12 @@ spec:
             httpGet:
               path: /
               port: pgwatch-adm
-        {{ if .Values.env.PW2_CONFIG }}
+          {{- end }}
+          {{ if .Values.env.PW2_CONFIG }}
           volumeMounts:
-              - name: sc-database-volume
-                mountPath: {{ .Values.env.PW2_CONFIG }}
-        {{ end }}
+            - name: sc-database-volume
+              mountPath: {{ .Values.env.PW2_CONFIG }}
+          {{ end }}
           {{ if .Values.env.PW2_METRICS_FOLDER }}
           volumeMounts:
             - name: sc-database-volume
@@ -88,18 +95,18 @@ spec:
       {{- end }}
       {{- with .Values.tolerations }}
       tolerations:
-  {{- toYaml . | nindent 8 }}
-  {{- end }}
-  {{ if .Values.env.PW2_CONFIG }}
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{ if .Values.env.PW2_CONFIG }}
       volumes:
         - name: sc-database-volume
-          emptyDir: {}
-  {{ end }}
-          {{ if .Values.env.PW2_METRICS_FOLDER }}
+          emptyDir: { }
+          {{ end }}
+        {{ if .Values.env.PW2_METRICS_FOLDER }}
         - name: metric-from-git
           gitRepo:
-            repository: "https://github.com/surajssd/hitcounter"
-            revision: "9fd11822b822c94853b1c74ceb53adb8e1d2cfc8"
-          {{ end }}
+            repository: {{ .Values.metrics.repository}}
+            revision: {{ .Values.metrics.revision}}
+  {{ end }}
 
 
