@@ -1,3 +1,4 @@
+{{- if not (and .Values.env.PW2_CONFIG (.Values.env.PW2_METRICS_FOLDER )) }}
 {{- if and .Values.persistentVolumes.database.enabled (not .Values.persistentVolumes.database.existingClaim) }}
   {{- $fullName := include "pgwatch2.fullname" . -}}
 kind: PersistentVolumeClaim
@@ -23,4 +24,5 @@ spec:
   resources:
     requests:
       storage: {{ .Values.persistentVolumes.database.size }}
+  {{- end }}
   {{- end }}
