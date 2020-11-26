@@ -73,17 +73,17 @@ spec:
               path: /
               port: pgwatch-adm
           {{- end }}
-          {{- if .Values.env.PW2_CONFIG }}
+          {{ if .Values.env.PW2_CONFIG }}
           volumeMounts:
             - name: sc-database-volume
               mountPath: {{ .Values.env.PW2_CONFIG }}
-          {{- end }}
-          {{- if .Values.env.PW2_METRICS_FOLDER }}
-          volumeMounts:
+            {{ if .Values.env.PW2_METRICS_FOLDER }}
             - name: metric-from-git
               mountPath: {{ .Values.env.PW2_METRICS_FOLDER }}
               subPath: {{ .Values.metrics.subPath }}
-          {{- end }}
+          {{ end }}
+          {{ end }}
+
           resources:
       {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
