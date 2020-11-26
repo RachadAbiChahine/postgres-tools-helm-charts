@@ -6,13 +6,13 @@ replicaCount: 1
 
 image:
   repository: cybertec/pgwatch2
-  tag: 1.7.1
+  tag: 1.8.1
   pullPolicy: IfNotPresent
 
 confdbsidecar:
   image:
     repository: kiwigrid/k8s-sidecar
-    tag: 0.1.178
+    tag: 1.3.0
       
 imagePullSecrets: []
 nameOverride: ""

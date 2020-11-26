@@ -1,7 +1,7 @@
 apiVersion: v1
 name: pgwatch2
-version: 0.1.8
-appVersion: "1.7.1"
+version: 0.1.9
+appVersion: "1.8.1"
 home: https://pgwatch.com/
 deprecated: false
 description: cybertec/pgwatch2 chart
