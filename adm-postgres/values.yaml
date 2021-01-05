@@ -1,0 +1,20 @@
+# Default values for ibuy-adm-aiven.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+image:
+  name: rachadac/ubuntu-psql-cli
+  pullPolicy: Always
+  tag: 4
+
+nameOverride: "ubuntu-adm"
+fullnameOverride: ""
+
+
+persistentVolume:
+  enabled: true
+  annotations: {}
+  accessModes:
+    - ReadWriteOnce
+  size: 10Gi

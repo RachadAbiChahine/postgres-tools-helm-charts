@@ -1,0 +1,53 @@
+{{- $fullName := include "ibuy-adm-aiven.fullname" . -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $fullName }}
+
+  labels:
+  {{- include "ibuy-adm-aiven.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "ibuy-adm-aiven.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      annotations:
+      labels:
+        app.kubernetes.io/name: {{ include "ibuy-adm-aiven.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      serviceAccountName: dbatools
+      imagePullSecrets:
+      - name: regcred
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: [ "/bin/bash", "-c", "--" ]
+          args: [ "while true; do sleep 300; done;" ]
+          volumeMounts:
+            - name: pg-backup
+              mountPath: /backup
+      volumes:
+        - name: pg-backup
+        {{- if .Values.persistentVolume.enabled }}
+          persistentVolumeClaim:
+          claimName: {{ if .Values.persistentVolume.existingClaim }}{{ .Values.persistentVolume.existingClaim }}{{- else }}{{ $fullName }}{{- end }}
+        {{- else }}
+          emptyDir: {}
+        {{- end }}
+
+
+
+
+
+
+
+
+
+
+
+
